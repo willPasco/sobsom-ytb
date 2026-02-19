@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Clipper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #222222;
+      --accent: #e8ff47;
+      --accent2: #ff6b35;
+      --text: #f0f0f0;
+      --muted: #666;
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-display);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.03em; }
+    .logo span { color: var(--accent); }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.7rem;
+      border-radius: 100px;
+    }
+
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── Left Panel ── */
+    .panel-left {
+      padding: 4rem 3rem;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .headline { font-size: 3.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .headline em { font-style: normal; color: var(--accent); display: block; }
+
+    .subtitle { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── Source Toggle ── */
+    .source-toggle {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .toggle-btn.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: 500;
+    }
+
+    /* ── Form ── */
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Drop zone */
+    .drop-zone {
+      border: 1.5px dashed var(--border);
+      border-radius: 8px;
+      padding: 2.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(232, 255, 71, 0.03);
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    }
+
+    .drop-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+    .drop-text { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+    .drop-text strong { color: var(--text); }
+
+    .file-selected {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    /* YouTube input */
+    .yt-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .yt-icon {
+      position: absolute;
+      left: 1rem;
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+
+    input[type="text"], input[type="number"], input[type="url"] {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input[type="url"] { padding-left: 2.8rem; }
+
+    input:focus { border-color: var(--accent); }
+    input[type="number"] { width: 100px; }
+
+    .row { display: flex; gap: 1rem; align-items: flex-end; }
+
+    button[type="submit"] {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 1rem 2rem;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: -0.02em;
+    }
+
+    button[type="submit"]:hover { opacity: 0.9; }
+    button[type="submit"]:active { transform: scale(0.99); }
+    button[type="submit"]:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Right Panel ── */
+    .panel-right {
+      padding: 4rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .panel-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .state-idle {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--muted);
+    }
+
+    .state-idle .big-icon { font-size: 4rem; opacity: 0.3; }
+    .state-idle p { font-family: var(--font-mono); font-size: 0.8rem; text-align: center; }
+
+    .state-loading {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .spinner {
+      width: 48px; height: 48px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: center; line-height: 1.8; }
+    .loading-step { color: var(--accent); font-weight: 500; }
+
+    /* Video title (YouTube) */
+    .video-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding: 0.6rem 0.8rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .video-title span { color: var(--text); }
+
+    .results-header { display: flex; align-items: center; justify-content: space-between; }
+    .results-count { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; }
+    .results-count span { color: var(--accent); }
+
+    .clips-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      overflow-y: auto;
+      max-height: calc(100vh - 320px);
+      padding-right: 0.5rem;
+    }
+
+    .clips-list::-webkit-scrollbar { width: 4px; }
+    .clips-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .clip-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .clip-card:hover { border-color: #333; }
+    .clip-number { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); min-width: 24px; }
+    .clip-info { flex: 1; min-width: 0; }
+
+    .clip-text {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0.3rem;
+    }
+
+    .clip-time { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); }
+    .clip-time .accent { color: var(--accent2); }
+
+    .btn-download {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-download:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-download-all {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.7rem 1.2rem;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+
+    .btn-download-all:hover { border-color: var(--accent); color: var(--accent); }
+
+    .error-box {
+      background: rgba(255, 80, 80, 0.05);
+      border: 1px solid rgba(255, 80, 80, 0.2);
+      border-radius: 8px;
+      padding: 1.2rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #ff5050;
+      line-height: 1.6;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
+      .panel-left { border-right: none; border-bottom: 1px solid var(--border); }
+      header { padding: 1.5rem; }
+      .headline { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Video<span>Clipper</span></div>
+  <div class="badge">● local · privado · offline</div>
+</header>
+
+<main>
+  <!-- ── Painel Esquerdo ── -->
+  <div class="panel-left">
+    <div>
+      <h1 class="headline">Extraia<em>clipes</em>por palavra.</h1>
+      <p class="subtitle" style="margin-top:1rem">
+        Use um vídeo local ou uma URL do YouTube.<br>
+        Tudo roda localmente — sem nuvem, sem custo.
+      </p>
+    </div>
+
+    <form id="form" autocomplete="off">
+      <div style="display:flex;flex-direction:column;gap:1.5rem">
+
+        <!-- Toggle fonte -->
+        <div class="form-group">
+          <label>Fonte do vídeo</label>
+          <div class="source-toggle">
+            <button type="button" class="toggle-btn active" id="btnUpload" onclick="setMode('upload')">
+              📁 Upload MP4
+            </button>
+            <button type="button" class="toggle-btn" id="btnYoutube" onclick="setMode('youtube')">
+              ▶ YouTube
+            </button>
+          </div>
+        </div>
+
+        <!-- Upload MP4 -->
+        <div class="form-group" id="sectionUpload">
+          <label>Arquivo MP4</label>
+          <div class="drop-zone" id="dropZone">
+            <input type="file" id="videoInput" accept="video/mp4" />
+            <div class="drop-icon">🎬</div>
+            <div class="drop-text"><strong>Clique para selecionar</strong> ou arraste aqui</div>
+            <div class="file-selected hidden" id="fileName"></div>
+          </div>
+        </div>
+
+        <!-- YouTube URL -->
+        <div class="form-group hidden" id="sectionYoutube">
+          <label>URL do YouTube</label>
+          <div class="yt-input-wrap">
+            <span class="yt-icon">▶</span>
+            <input type="url" id="ytUrl" placeholder="https://youtube.com/watch?v=..." />
+          </div>
+        </div>
+
+        <!-- Keyword -->
+        <div class="form-group">
+          <label>Palavra-chave</label>
+          <input type="text" id="keyword" placeholder="ex: contrato, entrega, prazo..." required />
+        </div>
+
+        <!-- Padding -->
+        <div class="form-group">
+          <label>Contexto ao redor (segundos)</label>
+          <div class="row">
+            <input type="number" id="padding" value="3" min="0" max="30" />
+            <span class="subtitle">segundos antes e depois</span>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn">Processar vídeo →</button>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- ── Painel Direito ── -->
+  <div class="panel-right">
+    <div class="panel-title">Resultados</div>
+
+    <div class="state-idle" id="stateIdle">
+      <div class="big-icon">✂️</div>
+      <p>Envie um vídeo ou cole uma URL<br>para começar. Os clipes aparecerão aqui.</p>
+    </div>
+
+    <div class="state-loading hidden" id="stateLoading">
+      <div class="spinner"></div>
+      <div class="loading-text">
+        <div class="loading-step" id="loadingStep">Iniciando...</div>
+        <div style="margin-top:0.5rem">Isso pode levar alguns minutos<br>dependendo do tamanho do vídeo.</div>
+      </div>
+    </div>
+
+    <div class="hidden" id="stateResults">
+      <div class="video-title hidden" id="videoTitle">📺 <span id="videoTitleText"></span></div>
+      <div class="results-header" style="margin-top:0.5rem">
+        <div class="results-count"><span id="clipsCount">0</span> clipes</div>
+        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">
+          keyword: <span id="resultKeyword" style="color:var(--accent)"></span>
+        </div>
+      </div>
+      <div class="clips-list" id="clipsList"></div>
+      <button class="btn-download-all" id="btnDownloadAll">⬇ Baixar todos os clipes</button>
+    </div>
+
+    <div class="error-box hidden" id="stateError"></div>
+  </div>
+</main>
+
+<script>
+  let mode = 'upload';
+  let currentClips = [];
+
+  // ── Toggle modo ──
+  function setMode(m) {
+    mode = m;
+    document.getElementById('btnUpload').classList.toggle('active', m === 'upload');
+    document.getElementById('btnYoutube').classList.toggle('active', m === 'youtube');
+    document.getElementById('sectionUpload').classList.toggle('hidden', m !== 'upload');
+    document.getElementById('sectionYoutube').classList.toggle('hidden', m !== 'youtube');
+  }
+
+  // ── Drag & Drop ──
+  const videoInput = document.getElementById('videoInput');
+  const dropZone = document.getElementById('dropZone');
+  const fileName = document.getElementById('fileName');
+
+  videoInput.addEventListener('change', () => {
+    if (videoInput.files[0]) {
+      fileName.textContent = '✓ ' + videoInput.files[0].name;
+      fileName.classList.remove('hidden');
+    }
+  });
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type === 'video/mp4') {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      videoInput.files = dt.files;
+      fileName.textContent = '✓ ' + file.name;
+      fileName.classList.remove('hidden');
+    }
+  });
+
+  // ── Helpers ──
+  function setState(state) {
+    ['stateIdle','stateLoading','stateResults','stateError'].forEach(id => {
+      document.getElementById(id).classList.add('hidden');
+    });
+    document.getElementById('state' + state.charAt(0).toUpperCase() + state.slice(1)).classList.remove('hidden');
+  }
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  }
+
+  // ── Loading steps por modo ──
+  const uploadSteps = ['Enviando vídeo...', 'Transcrevendo com Whisper...', 'Identificando trechos...', 'Cortando clipes...'];
+  const youtubeSteps = ['Baixando vídeo do YouTube...', 'Transcrevendo com Whisper...', 'Identificando trechos...', 'Cortando clipes...'];
+
+  // ── Submit ──
+  document.getElementById('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const keyword = document.getElementById('keyword').value.trim();
+    const padding = document.getElementById('padding').value;
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (!keyword) return;
+
+    submitBtn.disabled = true;
+    setState('loading');
+    currentClips = [];
+
+    const steps = mode === 'youtube' ? youtubeSteps : uploadSteps;
+    let stepIdx = 0;
+    const loadingStep = document.getElementById('loadingStep');
+    loadingStep.textContent = steps[0];
+
+    const stepInterval = setInterval(() => {
+      stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+      loadingStep.textContent = steps[stepIdx];
+    }, 5000);
+
+    try {
+      const formData = new FormData();
+      formData.append('keyword', keyword);
+      formData.append('padding', padding);
+
+      let endpoint;
+      if (mode === 'upload') {
+        const file = videoInput.files[0];
+        if (!file) throw new Error('Nenhum arquivo selecionado.');
+        formData.append('video', file);
+        endpoint = '/process/upload';
+      } else {
+        const url = document.getElementById('ytUrl').value.trim();
+        if (!url) throw new Error('URL do YouTube não informada.');
+        formData.append('url', url);
+        endpoint = '/process/youtube';
+      }
+
+      const res = await fetch(endpoint, { method: 'POST', body: formData });
+      const data = await res.json();
+      clearInterval(stepInterval);
+
+      if (!res.ok) {
+        document.getElementById('stateError').textContent = '⚠ ' + (data.detail || 'Erro ao processar.');
+        setState('error');
+        return;
+      }
+
+      currentClips = data.clips;
+      document.getElementById('clipsCount').textContent = data.total_clips;
+      document.getElementById('resultKeyword').textContent = data.keyword;
+
+      // Título do YouTube
+      const titleEl = document.getElementById('videoTitle');
+      if (data.title) {
+        document.getElementById('videoTitleText').textContent = data.title;
+        titleEl.classList.remove('hidden');
+      } else {
+        titleEl.classList.add('hidden');
+      }
+
+      const list = document.getElementById('clipsList');
+      list.innerHTML = '';
+      data.clips.forEach((clip, i) => {
+        const card = document.createElement('div');
+        card.className = 'clip-card';
+        card.innerHTML = `
+          <div class="clip-number">#${String(i+1).padStart(2,'0')}</div>
+          <div class="clip-info">
+            <div class="clip-text" title="${clip.text}">${clip.text}</div>
+            <div class="clip-time">
+              <span class="accent">${formatTime(clip.start)}</span>
+              → ${formatTime(clip.end)} · ${(clip.end - clip.start).toFixed(1)}s
+            </div>
+          </div>
+          <a class="btn-download" href="${clip.download_url}" download="${clip.name}">⬇ baixar</a>
+        `;
+        list.appendChild(card);
+      });
+
+      setState('results');
+
+    } catch (err) {
+      clearInterval(stepInterval);
+      document.getElementById('stateError').textContent = '⚠ ' + (err.message || 'Erro de conexão com o servidor.');
+      setState('error');
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+
+  // ── Download All ──
+  document.getElementById('btnDownloadAll').addEventListener('click', () => {
+    currentClips.forEach((clip, i) => {
+      setTimeout(() => {
+        const a = document.createElement('a');
+        a.href = clip.download_url;
+        a.download = clip.name;
+        a.click();
+      }, i * 500);
+    });
+  });
+</script>
+
+</body>
+</html>
