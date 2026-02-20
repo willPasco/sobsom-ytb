@@ -21,342 +21,129 @@
       --font-mono: 'DM Mono', monospace;
     }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-display);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-display); min-height: 100vh; display: flex; flex-direction: column; }
 
-    header {
-      padding: 2rem 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-    }
-
+    header { padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
     .logo { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.03em; }
     .logo span { color: var(--accent); }
+    .badge { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); border: 1px solid var(--border); padding: 0.3rem 0.7rem; border-radius: 100px; }
 
-    .badge {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      padding: 0.3rem 0.7rem;
-      border-radius: 100px;
-    }
+    main { flex: 1; display: grid; grid-template-columns: 1fr 1fr; }
 
-    main {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    /* ── Left Panel ── */
-    .panel-left {
-      padding: 4rem 3rem;
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
-
-    .headline { font-size: 3.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+    .panel-left { padding: 4rem 3rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 2rem; }
+    .headline { font-size: 3rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
     .headline em { font-style: normal; color: var(--accent); display: block; }
-
     .subtitle { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
 
-    /* ── Source Toggle ── */
-    .source-toggle {
-      display: flex;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 4px;
-      gap: 4px;
-    }
+    /* Toggle fonte */
+    .source-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; gap: 4px; }
+    .toggle-btn { flex: 1; padding: 0.6rem 1rem; border: none; border-radius: 6px; background: transparent; color: var(--muted); font-family: var(--font-mono); font-size: 0.8rem; cursor: pointer; transition: background 0.2s, color 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .toggle-btn.active { background: var(--accent); color: #000; font-weight: 500; }
 
-    .toggle-btn {
-      flex: 1;
-      padding: 0.6rem 1rem;
-      border: none;
-      border-radius: 6px;
-      background: transparent;
-      color: var(--muted);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .toggle-btn.active {
-      background: var(--accent);
-      color: #000;
-      font-weight: 500;
-    }
-
-    /* ── Form ── */
+    /* Form */
     .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-
-    label {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
+    label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
 
     /* Drop zone */
-    .drop-zone {
-      border: 1.5px dashed var(--border);
-      border-radius: 8px;
-      padding: 2.5rem;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      position: relative;
-    }
-
-    .drop-zone:hover, .drop-zone.drag-over {
-      border-color: var(--accent);
-      background: rgba(232, 255, 71, 0.03);
-    }
-
-    .drop-zone input[type="file"] {
-      position: absolute; inset: 0; opacity: 0; cursor: pointer;
-    }
-
-    .drop-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+    .drop-zone { border: 1.5px dashed var(--border); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: rgba(232,255,71,0.03); }
+    .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .drop-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
     .drop-text { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
     .drop-text strong { color: var(--text); }
-
-    .file-selected {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-top: 0.5rem;
-    }
+    .file-selected { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); margin-top: 0.5rem; }
 
     /* YouTube input */
-    .yt-input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .yt-icon {
-      position: absolute;
-      left: 1rem;
-      font-size: 1.1rem;
-      pointer-events: none;
-    }
+    .yt-input-wrap { position: relative; display: flex; align-items: center; }
+    .yt-icon { position: absolute; left: 1rem; font-size: 1.1rem; pointer-events: none; }
 
     input[type="text"], input[type="number"], input[type="url"] {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.8rem 1rem;
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
-      width: 100%;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.8rem 1rem; color: var(--text); font-family: var(--font-mono);
+      font-size: 0.9rem; outline: none; transition: border-color 0.2s; width: 100%;
     }
-
     input[type="url"] { padding-left: 2.8rem; }
-
     input:focus { border-color: var(--accent); }
     input[type="number"] { width: 100px; }
-
     .row { display: flex; gap: 1rem; align-items: flex-end; }
 
-    button[type="submit"] {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      padding: 1rem 2rem;
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-      width: 100%;
-      transition: opacity 0.2s, transform 0.1s;
-      letter-spacing: -0.02em;
+    /* Radio options */
+    .radio-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+    .radio-grid.two-col { grid-template-columns: 1fr 1fr; }
+
+    .radio-card { position: relative; }
+    .radio-card input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    .radio-label {
+      display: flex; flex-direction: column; gap: 0.2rem;
+      padding: 0.7rem 0.9rem; border: 1px solid var(--border);
+      border-radius: 6px; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+      background: var(--surface);
     }
 
+    .radio-label:hover { border-color: #444; }
+
+    .radio-card input:checked + .radio-label {
+      border-color: var(--accent);
+      background: rgba(232,255,71,0.05);
+    }
+
+    .radio-label .rl-title { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text); font-weight: 500; }
+    .radio-label .rl-sub { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); }
+    .radio-label .rl-badge { font-family: var(--font-mono); font-size: 0.6rem; color: var(--accent2); margin-top: 0.1rem; }
+
+    .disabled-hint { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); font-style: italic; }
+
+    button[type="submit"] {
+      background: var(--accent); color: #000; border: none; border-radius: 6px;
+      padding: 1rem 2rem; font-family: var(--font-display); font-size: 1rem;
+      font-weight: 800; cursor: pointer; width: 100%;
+      transition: opacity 0.2s, transform 0.1s; letter-spacing: -0.02em;
+    }
     button[type="submit"]:hover { opacity: 0.9; }
     button[type="submit"]:active { transform: scale(0.99); }
     button[type="submit"]:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* ── Right Panel ── */
-    .panel-right {
-      padding: 4rem 3rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
+    /* Right Panel */
+    .panel-right { padding: 4rem 3rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .panel-title { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
 
-    .panel-title {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .state-idle {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      color: var(--muted);
-    }
-
+    .state-idle { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; color: var(--muted); }
     .state-idle .big-icon { font-size: 4rem; opacity: 0.3; }
     .state-idle p { font-family: var(--font-mono); font-size: 0.8rem; text-align: center; }
 
-    .state-loading {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-    }
-
-    .spinner {
-      width: 48px; height: 48px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
+    .state-loading { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; }
+    .spinner { width: 48px; height: 48px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .loading-text { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: center; line-height: 1.8; }
     .loading-step { color: var(--accent); font-weight: 500; }
 
-    /* Video title (YouTube) */
-    .video-title {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--muted);
-      padding: 0.6rem 0.8rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
+    .video-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); padding: 0.6rem 0.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .video-title span { color: var(--text); }
 
     .results-header { display: flex; align-items: center; justify-content: space-between; }
     .results-count { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; }
     .results-count span { color: var(--accent); }
 
-    .clips-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      overflow-y: auto;
-      max-height: calc(100vh - 320px);
-      padding-right: 0.5rem;
-    }
-
+    .clips-list { display: flex; flex-direction: column; gap: 0.8rem; overflow-y: auto; max-height: calc(100vh - 340px); padding-right: 0.5rem; }
     .clips-list::-webkit-scrollbar { width: 4px; }
     .clips-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-    .clip-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      transition: border-color 0.2s;
-    }
-
+    .clip-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.2rem; display: flex; align-items: center; gap: 1rem; transition: border-color 0.2s; }
     .clip-card:hover { border-color: #333; }
     .clip-number { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); min-width: 24px; }
     .clip-info { flex: 1; min-width: 0; }
-
-    .clip-text {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 0.3rem;
-    }
-
+    .clip-text { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.3rem; }
     .clip-time { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); }
     .clip-time .accent { color: var(--accent2); }
 
-    .btn-download {
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      padding: 0.4rem 0.8rem;
-      cursor: pointer;
-      transition: border-color 0.2s, color 0.2s;
-      white-space: nowrap;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
+    .btn-download { background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: var(--font-mono); font-size: 0.7rem; padding: 0.4rem 0.8rem; cursor: pointer; transition: border-color 0.2s, color 0.2s; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
     .btn-download:hover { border-color: var(--accent); color: var(--accent); }
 
-    .btn-download-all {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 0.7rem 1.2rem;
-      cursor: pointer;
-      transition: border-color 0.2s, color 0.2s;
-      width: 100%;
-      margin-top: 0.5rem;
-    }
-
+    .btn-download-all { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: var(--font-display); font-size: 0.8rem; font-weight: 700; padding: 0.7rem 1.2rem; cursor: pointer; transition: border-color 0.2s, color 0.2s; width: 100%; margin-top: 0.5rem; }
     .btn-download-all:hover { border-color: var(--accent); color: var(--accent); }
 
-    .error-box {
-      background: rgba(255, 80, 80, 0.05);
-      border: 1px solid rgba(255, 80, 80, 0.2);
-      border-radius: 8px;
-      padding: 1.2rem;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: #ff5050;
-      line-height: 1.6;
-    }
+    .error-box { background: rgba(255,80,80,0.05); border: 1px solid rgba(255,80,80,0.2); border-radius: 8px; padding: 1.2rem; font-family: var(--font-mono); font-size: 0.8rem; color: #ff5050; line-height: 1.6; }
 
     .hidden { display: none !important; }
 
@@ -372,37 +159,29 @@
 
 <header>
   <div class="logo">Video<span>Clipper</span></div>
-  <div class="badge">● local · privado · offline</div>
+  <div class="badge" id="gpuBadge">● verificando...</div>
 </header>
 
 <main>
-  <!-- ── Painel Esquerdo ── -->
   <div class="panel-left">
     <div>
       <h1 class="headline">Extraia<em>clipes</em>por palavra.</h1>
-      <p class="subtitle" style="margin-top:1rem">
-        Use um vídeo local ou uma URL do YouTube.<br>
-        Tudo roda localmente — sem nuvem, sem custo.
-      </p>
+      <p class="subtitle" style="margin-top:0.8rem">Use um vídeo local ou uma URL do YouTube.<br>Tudo roda localmente — sem nuvem, sem custo.</p>
     </div>
 
     <form id="form" autocomplete="off">
-      <div style="display:flex;flex-direction:column;gap:1.5rem">
+      <div style="display:flex;flex-direction:column;gap:1.2rem">
 
-        <!-- Toggle fonte -->
+        <!-- Fonte do vídeo -->
         <div class="form-group">
           <label>Fonte do vídeo</label>
           <div class="source-toggle">
-            <button type="button" class="toggle-btn active" id="btnUpload" onclick="setMode('upload')">
-              📁 Upload MP4
-            </button>
-            <button type="button" class="toggle-btn" id="btnYoutube" onclick="setMode('youtube')">
-              ▶ YouTube
-            </button>
+            <button type="button" class="toggle-btn active" id="btnUpload" onclick="setMode('upload')">📁 Upload MP4</button>
+            <button type="button" class="toggle-btn" id="btnYoutube" onclick="setMode('youtube')">▶ YouTube</button>
           </div>
         </div>
 
-        <!-- Upload MP4 -->
+        <!-- Upload -->
         <div class="form-group" id="sectionUpload">
           <label>Arquivo MP4</label>
           <div class="drop-zone" id="dropZone">
@@ -413,7 +192,7 @@
           </div>
         </div>
 
-        <!-- YouTube URL -->
+        <!-- YouTube -->
         <div class="form-group hidden" id="sectionYoutube">
           <label>URL do YouTube</label>
           <div class="yt-input-wrap">
@@ -426,6 +205,67 @@
         <div class="form-group">
           <label>Palavra-chave</label>
           <input type="text" id="keyword" placeholder="ex: contrato, entrega, prazo..." required />
+        </div>
+
+        <!-- Modelo de transcrição -->
+        <div class="form-group">
+          <label>Modelo de transcrição</label>
+          <div class="radio-grid">
+
+            <div class="radio-card">
+              <input type="radio" name="model_name" id="modelTiny" value="tiny" />
+              <label class="radio-label" for="modelTiny">
+                <span class="rl-title">🐢 Tiny</span>
+                <span class="rl-sub">Devagar</span>
+                <span class="rl-badge">~1GB RAM</span>
+              </label>
+            </div>
+
+            <div class="radio-card">
+              <input type="radio" name="model_name" id="modelMedium" value="medium" checked />
+              <label class="radio-label" for="modelMedium">
+                <span class="rl-title">⚡ Medium</span>
+                <span class="rl-sub">Médio</span>
+                <span class="rl-badge">~4GB RAM</span>
+              </label>
+            </div>
+
+            <div class="radio-card">
+              <input type="radio" name="model_name" id="modelLarge" value="large" />
+              <label class="radio-label" for="modelLarge">
+                <span class="rl-title">🚀 Large</span>
+                <span class="rl-sub">Rápido</span>
+                <span class="rl-badge">~8GB RAM</span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Dispositivo -->
+        <div class="form-group">
+          <label>Processamento</label>
+          <div class="radio-grid two-col">
+
+            <div class="radio-card">
+              <input type="radio" name="device" id="deviceCpu" value="cpu" checked />
+              <label class="radio-label" for="deviceCpu">
+                <span class="rl-title">🖥 CPU</span>
+                <span class="rl-sub">Qualquer máquina</span>
+              </label>
+            </div>
+
+            <div class="radio-card" id="gpuOption">
+              <input type="radio" name="device" id="deviceGpu" value="cuda" disabled />
+              <label class="radio-label" for="deviceGpu" id="gpuLabel" style="opacity:0.4;cursor:not-allowed">
+                <span class="rl-title">🎮 GPU</span>
+                <span class="rl-sub">NVIDIA necessária</span>
+                <span class="rl-badge" id="gpuStatus">verificando...</span>
+              </label>
+            </div>
+
+          </div>
+          <div class="disabled-hint hidden" id="gpuHint">⚠ GPU não detectada nesta máquina</div>
         </div>
 
         <!-- Padding -->
@@ -443,7 +283,7 @@
     </form>
   </div>
 
-  <!-- ── Painel Direito ── -->
+  <!-- Painel Direito -->
   <div class="panel-right">
     <div class="panel-title">Resultados</div>
 
@@ -480,6 +320,39 @@
   let mode = 'upload';
   let currentClips = [];
 
+  // ── Detecta GPU ao carregar ──
+  async function checkCapabilities() {
+    try {
+      const res = await fetch('/capabilities');
+      const data = await res.json();
+
+      const gpuInput = document.getElementById('deviceGpu');
+      const gpuLabel = document.getElementById('gpuLabel');
+      const gpuStatus = document.getElementById('gpuStatus');
+      const gpuHint = document.getElementById('gpuHint');
+      const gpuBadge = document.getElementById('gpuBadge');
+
+      if (data.cuda_available) {
+        gpuInput.disabled = false;
+        gpuLabel.style.opacity = '1';
+        gpuLabel.style.cursor = 'pointer';
+        gpuStatus.textContent = 'disponível ✓';
+        gpuBadge.textContent = '● GPU ativa';
+        gpuBadge.style.color = '#e8ff47';
+        // Seleciona GPU automaticamente se disponível
+        gpuInput.checked = true;
+      } else {
+        gpuHint.classList.remove('hidden');
+        gpuStatus.textContent = 'não detectada';
+        gpuBadge.textContent = '● CPU mode';
+      }
+    } catch {
+      document.getElementById('gpuBadge').textContent = '● local';
+    }
+  }
+
+  checkCapabilities();
+
   // ── Toggle modo ──
   function setMode(m) {
     mode = m;
@@ -495,51 +368,37 @@
   const fileName = document.getElementById('fileName');
 
   videoInput.addEventListener('change', () => {
-    if (videoInput.files[0]) {
-      fileName.textContent = '✓ ' + videoInput.files[0].name;
-      fileName.classList.remove('hidden');
-    }
+    if (videoInput.files[0]) { fileName.textContent = '✓ ' + videoInput.files[0].name; fileName.classList.remove('hidden'); }
   });
-
   dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
   dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
   dropZone.addEventListener('drop', e => {
-    e.preventDefault();
-    dropZone.classList.remove('drag-over');
+    e.preventDefault(); dropZone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if (file && file.type === 'video/mp4') {
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      videoInput.files = dt.files;
-      fileName.textContent = '✓ ' + file.name;
-      fileName.classList.remove('hidden');
+      const dt = new DataTransfer(); dt.items.add(file); videoInput.files = dt.files;
+      fileName.textContent = '✓ ' + file.name; fileName.classList.remove('hidden');
     }
   });
 
   // ── Helpers ──
   function setState(state) {
-    ['stateIdle','stateLoading','stateResults','stateError'].forEach(id => {
-      document.getElementById(id).classList.add('hidden');
-    });
+    ['stateIdle','stateLoading','stateResults','stateError'].forEach(id => document.getElementById(id).classList.add('hidden'));
     document.getElementById('state' + state.charAt(0).toUpperCase() + state.slice(1)).classList.remove('hidden');
   }
 
   function formatTime(s) {
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
     return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
   }
-
-  // ── Loading steps por modo ──
-  const uploadSteps = ['Enviando vídeo...', 'Transcrevendo com Whisper...', 'Identificando trechos...', 'Cortando clipes...'];
-  const youtubeSteps = ['Baixando vídeo do YouTube...', 'Transcrevendo com Whisper...', 'Identificando trechos...', 'Cortando clipes...'];
 
   // ── Submit ──
   document.getElementById('form').addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const keyword = document.getElementById('keyword').value.trim();
     const padding = document.getElementById('padding').value;
+    const modelName = document.querySelector('input[name="model_name"]:checked').value;
+    const device = document.querySelector('input[name="device"]:checked').value;
     const submitBtn = document.getElementById('submitBtn');
 
     if (!keyword) return;
@@ -548,20 +407,20 @@
     setState('loading');
     currentClips = [];
 
+    const uploadSteps = ['Enviando vídeo...', 'Transcrevendo com Whisper...', 'Identificando trechos...', 'Cortando clipes...'];
+    const youtubeSteps = ['Baixando vídeo do YouTube...', 'Transcrevendo com Whisper...', 'Identificando trechos...', 'Cortando clipes...'];
     const steps = mode === 'youtube' ? youtubeSteps : uploadSteps;
     let stepIdx = 0;
     const loadingStep = document.getElementById('loadingStep');
     loadingStep.textContent = steps[0];
-
-    const stepInterval = setInterval(() => {
-      stepIdx = Math.min(stepIdx + 1, steps.length - 1);
-      loadingStep.textContent = steps[stepIdx];
-    }, 5000);
+    const stepInterval = setInterval(() => { stepIdx = Math.min(stepIdx + 1, steps.length - 1); loadingStep.textContent = steps[stepIdx]; }, 5000);
 
     try {
       const formData = new FormData();
       formData.append('keyword', keyword);
       formData.append('padding', padding);
+      formData.append('model_name', modelName);
+      formData.append('device', device);
 
       let endpoint;
       if (mode === 'upload') {
@@ -590,14 +449,9 @@
       document.getElementById('clipsCount').textContent = data.total_clips;
       document.getElementById('resultKeyword').textContent = data.keyword;
 
-      // Título do YouTube
       const titleEl = document.getElementById('videoTitle');
-      if (data.title) {
-        document.getElementById('videoTitleText').textContent = data.title;
-        titleEl.classList.remove('hidden');
-      } else {
-        titleEl.classList.add('hidden');
-      }
+      if (data.title) { document.getElementById('videoTitleText').textContent = data.title; titleEl.classList.remove('hidden'); }
+      else { titleEl.classList.add('hidden'); }
 
       const list = document.getElementById('clipsList');
       list.innerHTML = '';
@@ -608,10 +462,7 @@
           <div class="clip-number">#${String(i+1).padStart(2,'0')}</div>
           <div class="clip-info">
             <div class="clip-text" title="${clip.text}">${clip.text}</div>
-            <div class="clip-time">
-              <span class="accent">${formatTime(clip.start)}</span>
-              → ${formatTime(clip.end)} · ${(clip.end - clip.start).toFixed(1)}s
-            </div>
+            <div class="clip-time"><span class="accent">${formatTime(clip.start)}</span> → ${formatTime(clip.end)} · ${(clip.end - clip.start).toFixed(1)}s</div>
           </div>
           <a class="btn-download" href="${clip.download_url}" download="${clip.name}">⬇ baixar</a>
         `;
@@ -619,7 +470,6 @@
       });
 
       setState('results');
-
     } catch (err) {
       clearInterval(stepInterval);
       document.getElementById('stateError').textContent = '⚠ ' + (err.message || 'Erro de conexão com o servidor.');
@@ -629,15 +479,9 @@
     }
   });
 
-  // ── Download All ──
   document.getElementById('btnDownloadAll').addEventListener('click', () => {
     currentClips.forEach((clip, i) => {
-      setTimeout(() => {
-        const a = document.createElement('a');
-        a.href = clip.download_url;
-        a.download = clip.name;
-        a.click();
-      }, i * 500);
+      setTimeout(() => { const a = document.createElement('a'); a.href = clip.download_url; a.download = clip.name; a.click(); }, i * 500);
     });
   });
 </script>

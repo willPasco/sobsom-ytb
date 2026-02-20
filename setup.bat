@@ -138,6 +138,16 @@ for %%p in (%DEPS%) do (
     )
 )
 
+:: ── Instala Triton (opcional, elimina warnings de GPU) ───────────────────────
+echo.
+echo [INFO] Tentando instalar Triton (otimizacao GPU, opcional)...
+python -m pip install triton >nul 2>&1
+if %errorlevel% equ 0 (
+    echo [OK] Triton instalado com sucesso.
+) else (
+    echo [AVISO] Triton nao disponivel nesta maquina ^(opcional^). Sem impacto no funcionamento.
+)
+
 :: ── Configura hosts (videoclipper.local) ─────────────────────────────────────
 echo.
 echo [INFO] Configurando dominio local...
